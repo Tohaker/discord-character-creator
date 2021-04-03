@@ -12,4 +12,3 @@ cd discord-character-creator
 npm install
 npm run build
 npm start
-

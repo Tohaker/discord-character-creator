@@ -1,8 +1,3 @@
-resource "google_compute_network" "vpc_network" {
-  name                    = "bot-network"
-  auto_create_subnetworks = "true"
-}
-
 resource "google_compute_instance" "vm_instance" {
   name = "bot-server"
   machine_type = "f1-micro"
@@ -14,10 +9,10 @@ resource "google_compute_instance" "vm_instance" {
   }
 
   network_interface {
-    network = google_compute_network.vpc_network.self_link
+    network = "default"
     access_config {
     }
   }
 
-  metadata_startup_script = file(var.bootstrap_file)
+  metadata_startup_script = file("${path.module}/${var.bootstrap_file}")
 }

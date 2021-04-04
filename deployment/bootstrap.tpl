@@ -9,7 +9,7 @@ git clone https://github.com/Tohaker/discord-character-creator.git
 cd discord-character-creator
 
 # Setup environment variables
-export BOT_TOKEN={{BOT_TOKEN}}
+export BOT_TOKEN=${token}
 
 # Build and run the app
 npm install

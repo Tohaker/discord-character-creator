@@ -1,5 +1,5 @@
 provider "google" {
-  project   = "discord-bots-309621"
-  region    = "europe-west1"
-  zone      = "europe-west1-b"
+  project = "discord-bots-309621"
+  region  = "us-east1"
+  zone    = "us-east1-b"
 }

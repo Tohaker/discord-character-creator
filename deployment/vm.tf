@@ -1,10 +1,10 @@
 resource "google_compute_instance" "vm_instance" {
-  name = "bot-server"
+  name         = "bot-server"
   machine_type = "f1-micro"
 
   boot_disk {
     initialize_params {
-        image = "debian-cloud/debian-9"
+      image = "debian-cloud/debian-9"
     }
   }
 
@@ -14,5 +14,5 @@ resource "google_compute_instance" "vm_instance" {
     }
   }
 
-  metadata_startup_script = file("${path.module}/${var.bootstrap_file}")
+  metadata_startup_script = templatefile("${path.module}/${var.bootstrap_file}", { token = var.bot_token })
 }

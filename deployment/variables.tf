@@ -1,3 +1,15 @@
+variable "location" {
+  default = "us-east1"
+}
+
+variable "project_id" {
+  default = "discord-bots-309621"
+}
+
+variable "app_file" {
+  default = "app.zip"
+}
+
 variable "bootstrap_file" {
   default = "bootstrap.tpl"
 }

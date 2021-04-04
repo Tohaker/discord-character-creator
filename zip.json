@@ -1,0 +1,14 @@
+{
+    "compressionLevel": 9,
+    "dereferenceLinks": true,
+    "entries": [
+      "build/src",
+      "node_modules"
+    ],
+    "force": true,
+    "mode": "add",
+    "outputEntry": "deployment/app.zip",
+    "quiet": false,
+    "verbose": false
+  }
+  

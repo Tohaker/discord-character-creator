@@ -28,9 +28,8 @@ client.once("ready", () => {
 });
 
 client.on("message", async (message) => {
-  console.log(message.content);
-
   if (message.content.startsWith(`${prefix}create`)) {
+    console.log(message.content);
     const userId = message.author.id;
 
     const spaceIndex = message.content.indexOf(" ");

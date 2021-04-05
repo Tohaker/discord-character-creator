@@ -4,6 +4,9 @@ data "google_project" "project" {
 resource "google_app_engine_application" "app" {
   project     = data.google_project.project.project_id
   location_id = var.location
+
+
+  database_type = "CLOUD_FIRESTORE"
 }
 
 resource "google_app_engine_standard_app_version" "app" {

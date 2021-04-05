@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "description": "D&D Character Creater for Discord",
   "scripts": {
-    "clean": "rimraf build/",
-    "copy-files": "copyfiles src/**/*.html build/",
+    "prebuild": "rimraf build/",
+    "postbuild": "copyfiles src/**/*.html build/",
     "build:zip": "jszip-cli -c zip.json",
-    "build": "npm run clean && tsc && npm run copy-files",
+    "build": "tsc",
     "start": "node build/src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

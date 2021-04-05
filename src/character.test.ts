@@ -1,5 +1,4 @@
-import { Firestore } from "@google-cloud/firestore";
-import FCG from "fantasy-content-generator";
+import { Names } from "fantasy-content-generator";
 import { createCharacter } from "./character";
 
 const mockDocument = {
@@ -27,7 +26,7 @@ jest.mock("fantasy-content-generator", () => ({
 // const mockGenerate = FCG.Names.generate as jest.MockedFunction<any>;
 
 describe("Character", () => {
-  FCG.Names.generate.mockReturnValue({
+  Names.generate.mockReturnValue({
     formattedData: {
       name: "Some Name",
       race: "Human",
@@ -78,7 +77,7 @@ describe("Character", () => {
               gender: "Female",
             },
             {
-              id: "b669995",
+              id: "0ba20ab",
               name: "Some Name",
               race: "Human",
               gender: "Female",
@@ -107,7 +106,7 @@ describe("Character", () => {
           updated: new Date(1111),
           characters: [
             {
-              id: "b669995",
+              id: "0ba20ab",
               name: "Some Name",
               race: "Human",
               gender: "Female",
@@ -133,7 +132,7 @@ describe("Character", () => {
             updated: new Date(1111),
             characters: [
               {
-                id: "b669995",
+                id: "0ba20ab",
                 name: "Some Name",
                 race: "Human",
                 gender: "Female",
@@ -163,7 +162,7 @@ describe("Character", () => {
               gender: "Female",
             },
             {
-              id: "94ad592",
+              id: "eb858c6",
               name: "New Name",
               race: "Human",
               gender: "Female",
@@ -192,7 +191,7 @@ describe("Character", () => {
           updated: new Date(1111),
           characters: [
             {
-              id: "94ad592",
+              id: "eb858c6",
               name: "New Name",
               race: "Human",
               gender: "Female",

@@ -28,6 +28,9 @@ jobs:
           npm i
           npm run build
 
+      - name: Test App
+        run: npm run test:ci
+
       - name: Package App
         run: |
           npm ci --only=prod

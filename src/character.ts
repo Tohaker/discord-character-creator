@@ -1,5 +1,5 @@
 import { Firestore } from "@google-cloud/firestore";
-import FCG from "fantasy-content-generator";
+import { Names } from "fantasy-content-generator";
 import md5 from "md5";
 import { Character, Document } from "./types";
 
@@ -9,9 +9,15 @@ export const createCharacter = async (userId: string, name?: string) => {
   const document = firestore.doc(`users/${userId}`);
   const snapshot = await document.get();
 
-  const { formattedData } = FCG.Names.generate();
-  const newCharacter: Character = { ...formattedData };
-  if (name) newCharacter.name = name;
+  const {
+    formattedData: { name: genName, gender, race },
+  } = Names.generate();
+  const newCharacter: Character = {
+    id: undefined,
+    name: name || genName,
+    gender,
+    race,
+  };
 
   const characterId = md5(JSON.stringify(newCharacter)).substr(0, 7);
   newCharacter.id = characterId;
@@ -34,6 +40,7 @@ export const createCharacter = async (userId: string, name?: string) => {
       characters: [newCharacter],
     };
 
+    console.log(`Creating new document for user ${userId}`);
     await document.create(body);
     return true;
   } catch (e) {

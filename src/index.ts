@@ -32,8 +32,10 @@ client.on("message", async (message) => {
 
   if (message.content.startsWith(`${prefix}create`)) {
     const userId = message.author.id;
+
+    const spaceIndex = message.content.indexOf(" ");
     const characterName =
-      message.content.substr(message.content.indexOf(" ") + 1) || undefined;
+      spaceIndex >= 0 ? message.content.substr(spaceIndex + 1) : undefined;
     await createCharacter(userId, characterName);
   }
 

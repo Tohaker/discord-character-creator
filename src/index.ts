@@ -9,7 +9,7 @@ dotenv.config();
 // Front end routing - BEGIN
 const app = express();
 
-app.get("/", (req, res) => {
+app.get("/", (_req, res) => {
   res.sendFile(path.join(__dirname + "/index.html"));
 });
 
@@ -29,13 +29,13 @@ client.once("ready", () => {
 
 client.on("message", async (message) => {
   if (message.content.startsWith(`${prefix}create`)) {
-    console.log(message.content);
+    console.log(`Received creation request: ${message.content}`);
     const userId = message.author.id;
 
     const spaceIndex = message.content.indexOf(" ");
     const characterName =
       spaceIndex >= 0 ? message.content.substr(spaceIndex + 1) : undefined;
-    await createCharacter(userId, characterName);
+    message.channel.send(await createCharacter(userId, characterName));
   }
 
   if (message.content.startsWith(`${prefix}ping`)) message.channel.send("pong");

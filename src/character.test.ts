@@ -22,9 +22,6 @@ jest.mock("fantasy-content-generator", () => ({
   },
 }));
 
-// const mockFirestore = Firestore as jest.MockedClass<typeof Firestore>;
-// const mockGenerate = FCG.Names.generate as jest.MockedFunction<any>;
-
 describe("Character", () => {
   Names.generate.mockReturnValue({
     formattedData: {
@@ -85,7 +82,9 @@ describe("Character", () => {
           ],
         });
         expect(mockDocument.create).not.toBeCalled();
-        expect(result).toBe(true);
+        expect(result).toBe(
+          "New character successfully created:\n```fix\nName: Some Name \nRace: Human \nID: 0ba20ab \n```"
+        );
       });
     });
 
@@ -114,7 +113,9 @@ describe("Character", () => {
           ],
         });
         expect(mockDocument.update).not.toBeCalled();
-        expect(result).toBe(true);
+        expect(result).toBe(
+          "Your first character successfully created:\n```fix\nName: Some Name \nRace: Human \nID: 0ba20ab \n```"
+        );
       });
 
       describe("given the document creation fails", () => {
@@ -122,7 +123,7 @@ describe("Character", () => {
           mockDocument.create.mockRejectedValue({ data: false });
         });
 
-        it("should return false", async () => {
+        it("should return an empty string", async () => {
           const result = await createCharacter("1234");
 
           expect(mockDocument.get).toBeCalledTimes(1);
@@ -140,7 +141,9 @@ describe("Character", () => {
             ],
           });
           expect(mockDocument.update).not.toBeCalled();
-          expect(result).toBe(false);
+          expect(result).toBe(
+            "Something went wrong while creating your character, try again later."
+          );
         });
       });
     });
@@ -170,7 +173,9 @@ describe("Character", () => {
           ],
         });
         expect(mockDocument.create).not.toBeCalled();
-        expect(result).toBe(true);
+        expect(result).toBe(
+          "New character successfully created:\n```fix\nName: New Name \nRace: Human \nID: eb858c6 \n```"
+        );
       });
     });
 
@@ -199,7 +204,9 @@ describe("Character", () => {
           ],
         });
         expect(mockDocument.update).not.toBeCalled();
-        expect(result).toBe(true);
+        expect(result).toBe(
+          "Your first character successfully created:\n```fix\nName: New Name \nRace: Human \nID: eb858c6 \n```"
+        );
       });
     });
   });

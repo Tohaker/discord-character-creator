@@ -5,6 +5,9 @@ import { Character, Document } from "./types";
 
 const firestore = new Firestore();
 
+const formatCharacter = (title: string, character: Character) =>
+  `${title}\n\`\`\`fix\nName: ${character.name} \nRace: ${character.race} \nID: ${character.id} \n\`\`\``;
+
 export const createCharacter = async (userId: string, name?: string) => {
   const document = firestore.doc(`users/${userId}`);
   const snapshot = await document.get();
@@ -28,7 +31,7 @@ export const createCharacter = async (userId: string, name?: string) => {
       updated: new Date(Date.now()),
       characters: [...snapshot.data().characters, newCharacter],
     });
-    return true;
+    return formatCharacter("New character successfully created:", newCharacter);
   }
 
   try {
@@ -42,9 +45,12 @@ export const createCharacter = async (userId: string, name?: string) => {
 
     console.log(`Creating new document for user ${userId}`);
     await document.create(body);
-    return true;
+    return formatCharacter(
+      "Your first character successfully created:",
+      newCharacter
+    );
   } catch (e) {
     console.log(`Failed to create document: ${e}`);
-    return false;
+    return "Something went wrong while creating your character, try again later.";
   }
 };

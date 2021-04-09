@@ -54,3 +54,27 @@ export const createCharacter = async (userId: string, name?: string) => {
     return "Something went wrong while creating your character, try again later.";
   }
 };
+
+export const deleteCharacter = async (userId: string, characterId?: string) => {
+  const document = firestore.doc(`users/${userId}`);
+  const snapshot = await document.get();
+
+  if (!snapshot.exists) {
+    return "You have no Characters to delete";
+  }
+
+  const characters: Character[] = snapshot.data()?.characters;
+  const toDelete = characters?.find((c) => c.id === characterId);
+
+  if (!characterId || !toDelete) {
+    return "You need to provide a valid Character ID";
+  }
+
+  const newCharacters = characters.filter((c) => c.id !== characterId);
+  await document.update({
+    updated: new Date(Date.now()),
+    characters: newCharacters,
+  });
+
+  return `Successfully deleted ${toDelete.name}`;
+};

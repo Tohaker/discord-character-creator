@@ -2,7 +2,7 @@ import Discord from "discord.js";
 import express from "express";
 import path from "path";
 import dotenv from "dotenv";
-import { createCharacter } from "./character";
+import { createCharacter, deleteCharacter } from "./character";
 
 dotenv.config();
 
@@ -27,15 +27,26 @@ client.once("ready", () => {
   console.log("Ready!");
 });
 
+const getParameters = (content: string) => {
+  const spaceIndex = content.indexOf(" ");
+  return spaceIndex >= 0 ? content.substr(spaceIndex + 1) : undefined;
+};
+
 client.on("message", async (message) => {
   if (message.content.startsWith(`${prefix}create`)) {
     console.log(`Received creation request: ${message.content}`);
     const userId = message.author.id;
 
-    const spaceIndex = message.content.indexOf(" ");
-    const characterName =
-      spaceIndex >= 0 ? message.content.substr(spaceIndex + 1) : undefined;
+    const characterName = getParameters(message.content);
     message.channel.send(await createCharacter(userId, characterName));
+  }
+
+  if (message.content.startsWith(`${prefix}delete`)) {
+    console.log(`Received deletion request: ${message.content}`);
+    const userId = message.author.id;
+
+    const characterId = getParameters(message.content);
+    message.channel.send(await deleteCharacter(userId, characterId));
   }
 
   if (message.content.startsWith(`${prefix}ping`)) message.channel.send("pong");

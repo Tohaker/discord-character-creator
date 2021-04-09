@@ -5,6 +5,7 @@ describe("Bot", () => {
     login: jest.fn(),
   };
   const mockCreateCharacter = jest.fn().mockResolvedValue("character");
+  const mockDeleteCharacter = jest.fn().mockResolvedValue("deleted");
 
   jest.spyOn(console, "log").mockImplementation(() => {});
 
@@ -22,6 +23,7 @@ describe("Bot", () => {
     jest.mock("express", () => require("jest-express"));
     jest.mock("./character", () => ({
       createCharacter: mockCreateCharacter,
+      deleteCharacter: mockDeleteCharacter,
     }));
 
     process.env.BOT_TOKEN = "bot token";
@@ -84,6 +86,44 @@ describe("Bot", () => {
 
         expect(mockCreateCharacter).toBeCalledWith("1234", "Some Name");
         expect(mockMessage.channel.send).toBeCalledWith("character");
+      });
+    });
+  });
+
+  describe('given a message "!delete" is received', () => {
+    it("should respond with the deleted character message", async () => {
+      const onMessage: Function = mockClient.on.mock.calls[0][1];
+      const mockMessage = {
+        author: {
+          id: "1234",
+        },
+        content: "!delete",
+        channel: {
+          send: jest.fn(),
+        },
+      };
+      await onMessage(mockMessage);
+
+      expect(mockDeleteCharacter).toBeCalledWith("1234", undefined);
+      expect(mockMessage.channel.send).toBeCalledWith("deleted");
+    });
+
+    describe("given an id is provided", () => {
+      it("should respond with the deleted character message", async () => {
+        const onMessage: Function = mockClient.on.mock.calls[0][1];
+        const mockMessage = {
+          author: {
+            id: "1234",
+          },
+          content: "!delete id456",
+          channel: {
+            send: jest.fn(),
+          },
+        };
+        await onMessage(mockMessage);
+
+        expect(mockDeleteCharacter).toBeCalledWith("1234", "id456");
+        expect(mockMessage.channel.send).toBeCalledWith("deleted");
       });
     });
   });

@@ -1,5 +1,5 @@
 import { Names } from "fantasy-content-generator";
-import { createCharacter, deleteCharacter } from "./character";
+import { createCharacter, deleteCharacter, listCharacters } from "./character";
 
 const mockDocument = {
   get: jest.fn(),
@@ -34,23 +34,24 @@ describe("Character", () => {
   jest.spyOn(console, "log").mockImplementation(() => {});
   jest.spyOn(Date, "now").mockReturnValue(1111);
 
-  const mockSnapshot = {
-    userId: "1234",
-    created: new Date(),
-    updated: new Date(),
-    characters: [
-      {
-        id: "4567",
-        name: "Previous Name",
-        race: "Human",
-        gender: "Female",
-      },
-    ],
-  };
+  let mockSnapshot;
 
   beforeEach(() => {
     jest.clearAllMocks();
 
+    mockSnapshot = {
+      userId: "1234",
+      created: new Date(),
+      updated: new Date(),
+      characters: [
+        {
+          id: "4567",
+          name: "Previous Name",
+          race: "Human",
+          gender: "Female",
+        },
+      ],
+    };
     mockDocument.get.mockResolvedValue({
       exists: true,
       data: () => mockSnapshot,
@@ -257,6 +258,55 @@ describe("Character", () => {
             characters: [],
           });
           expect(result).toBe("Successfully deleted Previous Name");
+        });
+      });
+    });
+  });
+
+  describe("listCharacters", () => {
+    describe("given the document does not exist", () => {
+      beforeEach(() => {
+        mockDocument.get.mockResolvedValue({
+          exists: false,
+        });
+      });
+
+      it("should return a message", async () => {
+        const result = await listCharacters("1234");
+
+        expect(result).toBe("No Characters found");
+      });
+    });
+
+    describe("given the document exists", () => {
+      describe("given there are no characters", () => {
+        beforeEach(() => {
+          mockSnapshot.characters = [];
+        });
+
+        it("should return a message", async () => {
+          const result = await listCharacters("1234");
+
+          expect(result).toBe("No Characters found");
+        });
+      });
+
+      describe("given there are characters", () => {
+        beforeEach(() => {
+          mockSnapshot.characters.push({
+            id: "7890",
+            name: "Another Name",
+            race: "Human",
+            gender: "Male",
+          });
+        });
+
+        it("should return the formatted characters", async () => {
+          const result = await listCharacters("1234");
+
+          expect(result).toBe(
+            "1.\n```fix\nName: Previous Name \nRace: Human \nID: 4567 \n```\n2.\n```fix\nName: Another Name \nRace: Human \nID: 7890 \n```\n"
+          );
         });
       });
     });

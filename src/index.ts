@@ -2,7 +2,7 @@ import Discord from "discord.js";
 import express from "express";
 import path from "path";
 import dotenv from "dotenv";
-import { createCharacter, deleteCharacter } from "./character";
+import { createCharacter, deleteCharacter, listCharacters } from "./character";
 
 dotenv.config();
 
@@ -47,6 +47,13 @@ client.on("message", async (message) => {
 
     const characterId = getParameters(message.content);
     message.channel.send(await deleteCharacter(userId, characterId));
+  }
+
+  if (message.content.startsWith(`${prefix}list`)) {
+    console.log(`Received list request: ${message.content}`);
+    const userId = message.author.id;
+
+    message.channel.send(await listCharacters(userId));
   }
 
   if (message.content.startsWith(`${prefix}ping`)) message.channel.send("pong");

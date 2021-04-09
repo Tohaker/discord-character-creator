@@ -63,7 +63,7 @@ export const deleteCharacter = async (userId: string, characterId?: string) => {
     return "You have no Characters to delete";
   }
 
-  const characters: Character[] = snapshot.data()?.characters;
+  const characters: Character[] = snapshot.data()?.characters || [];
   const toDelete = characters?.find((c) => c.id === characterId);
 
   if (!characterId || !toDelete) {
@@ -77,4 +77,19 @@ export const deleteCharacter = async (userId: string, characterId?: string) => {
   });
 
   return `Successfully deleted ${toDelete.name}`;
+};
+
+export const listCharacters = async (userId: string) => {
+  const document = firestore.doc(`users/${userId}`);
+  const snapshot = await document.get();
+  const characters: Character[] = snapshot.data?.()?.characters || [];
+
+  if (!snapshot.exists || characters.length === 0) {
+    return "No Characters found";
+  }
+
+  return characters.reduce(
+    (acc, prev, i) => acc + formatCharacter(`${i + 1}.`, prev) + "\n",
+    ""
+  );
 };
